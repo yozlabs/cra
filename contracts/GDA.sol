@@ -80,13 +80,13 @@ contract GDA is ERC721A {
     /**
      * @dev Returns the current auction price given the current and previous step.
      */
-    function _getAuctionPrice(uint256 currStep_, uint256 prevStep_) internal view returns (uint256) {
-        uint256 price = _pricePerStep[prevStep_];
-        uint256 passedSteps = currStep_ - prevStep_;
+    function _getAuctionPrice(uint256 currStep, uint256 prevStep) internal view returns (uint256) {
+        uint256 price = _pricePerStep[prevStep];
+        uint256 passedSteps = currStep - prevStep;
         uint256 numMinted;
 
         while (passedSteps > 0) {
-            numMinted = _mintsPerStep[prevStep_];
+            numMinted = _mintsPerStep[prevStep];
 
             // More than the expected rate, raise the price
             if (numMinted > expectedStepMintRate) {
@@ -102,7 +102,7 @@ contract GDA is ERC721A {
             }
             // If numMinted == expectedStepMintRate, keep the same price
 
-            prevStep_ += 1;
+            prevStep += 1;
             passedSteps -= 1;
         }
 
