@@ -61,7 +61,6 @@ contract GDA is ERC721A {
         // Auction steps start at 1
         _currentStep = 1;
         _pricePerStep[1] = startPrice;
- 
     }
 
     /**
@@ -81,11 +80,7 @@ contract GDA is ERC721A {
     /**
      * @dev Returns the current auction price given the current and previous step.
      */
-    function _getAuctionPrice(uint256 currStep_, uint256 prevStep_)
-        internal
-        view
-        returns (uint256)
-    {
+    function _getAuctionPrice(uint256 currStep_, uint256 prevStep_) internal view returns (uint256) {
         uint256 price = _pricePerStep[prevStep_];
         uint256 passedSteps = currStep_ - prevStep_;
         uint256 numMinted;
@@ -117,14 +112,7 @@ contract GDA is ERC721A {
     /**
      * @dev Returns a tuple of the current step and price.
      */
-    function _getCurrentStepAndPrice()
-        internal
-        view
-        returns (
-            uint256,
-            uint256
-        )
-    {
+    function _getCurrentStepAndPrice() internal view returns (uint256, uint256) {
         uint256 step = _getStep();
 
         if (step == _currentStep) {
