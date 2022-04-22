@@ -1,4 +1,16 @@
 {
+  "name": "GDA",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "test": "hardhat test",
+    "prettier": "prettier --write 'contracts/**/*.sol'",
+    "prettier:check": "prettier --check 'contracts/**/*.sol'",
+    "solhint": "solhint --config ./.solhint.json 'contracts/**/*.sol' --fix",
+    "solhint:check": "solhint --config ./.solhint.json 'contracts/**/*.sol'",
+    "lint": "yarn run prettier && yarn run solhint",
+    "lint:check": "yarn run prettier:check && yarn run solhint:check"
+  },
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",
     "erc721a": "^3.2.0",

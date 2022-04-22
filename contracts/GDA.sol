@@ -38,7 +38,7 @@ contract GDA is ERC721A {
     // Mapping from step to price at that step
     mapping(uint256 => uint256) private _pricePerStep;
 
-    constructor (
+    constructor(
         string memory name_,
         string memory symbol_,
         uint256 collectionSize_,
@@ -74,7 +74,7 @@ contract GDA is ERC721A {
         uint256 step = Math.ceilDiv(elapsedTime, stepDuration);
 
         // Steps start at 1
-        return step > 0 ? step: 1;
+        return step > 0 ? step : 1;
     }
 
     /**
@@ -128,7 +128,7 @@ contract GDA is ERC721A {
      * @dev Mints `quantity` of tokens and transfers them to the sender.
      * If the sender sends more ETH than needed, it refunds them.
      */
-    function mint(uint256 quantity) external payable{
+    function mint(uint256 quantity) external payable {
         require(quantity > 0, "Mint quantity must > 0");
         require(_totalMinted() + quantity <= collectionSize, "Will exceed maximum supply");
 
