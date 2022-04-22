@@ -1,4 +1,4 @@
-name: GDA Tests
+name: CI
 on:
   push:
     branches: [main]
