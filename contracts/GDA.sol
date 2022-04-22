@@ -18,10 +18,10 @@ contract GDA is Ownable, ERC721A {
     // Length of an auction step in seconds
     uint256 public stepDuration;
 
-    // Starting price of the auction
+    // Starting price of the auction in wei
     uint256 public startPrice;
 
-    // Floor price of the auction
+    // Floor price of the auction in wei
     uint256 public floorPrice;
 
     // Magnitude of price change per step
