@@ -2,10 +2,9 @@
 pragma solidity ^0.8.4;
 
 import "erc721a/contracts/ERC721A.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 
-contract GDA is Ownable, ERC721A {
+contract GDA is ERC721A {
     // Size of the collection
     uint256 public collectionSize;
 
