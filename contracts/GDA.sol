@@ -31,7 +31,7 @@ contract GDA is Ownable, ERC721A {
     uint256 public expectedStepMintRate;
 
     // Current step in the auction, starts at 1
-    uint256 internal currentStep;
+    uint256 private _currentStep;
 
     // Mapping from step to number of mints at that step
     mapping(uint256 => uint256) private _mintsPerStep;
@@ -60,7 +60,7 @@ contract GDA is Ownable, ERC721A {
         expectedStepMintRate = collectionSize / (duration_ / stepDuration_);
 
         // Auction steps start at 1
-        currentStep = 1;
+        _currentStep = 1;
         _pricePerStep[1] = startPrice;
  
     }
@@ -68,7 +68,7 @@ contract GDA is Ownable, ERC721A {
     /**
      * @dev Get the current step of the auction based on the elapsed time.
      */
-    function getStep() internal view returns (uint256) {
+    function _getStep() internal view returns (uint256) {
         uint256 elapsedTime = duration;
         if (startTime + duration > block.timestamp) {
             elapsedTime = block.timestamp - startTime;
@@ -82,12 +82,11 @@ contract GDA is Ownable, ERC721A {
     /**
      * @dev Returns the current auction price given the current and previous step.
      */
-    function getAuctionPrice(uint256 currStep_, uint256 prevStep_)
+    function _getAuctionPrice(uint256 currStep_, uint256 prevStep_)
         internal
         view
         returns (uint256)
     {
-
         uint256 price = _pricePerStep[prevStep_];
         uint256 passedSteps = currStep_ - prevStep_;
         uint256 numMinted;
@@ -117,9 +116,9 @@ contract GDA is Ownable, ERC721A {
     }
 
     /**
-     * @dev Returns a tuple of the current step and price
+     * @dev Returns a tuple of the current step and price.
      */
-    function getCurrentStepAndPrice()
+    function _getCurrentStepAndPrice()
         internal
         view
         returns (
@@ -127,12 +126,12 @@ contract GDA is Ownable, ERC721A {
             uint256
         )
     {
-        uint256 step = getStep();
+        uint256 step = _getStep();
 
-        if (step == currentStep) {
-            return (currentStep, _pricePerStep[currentStep]);
-        } else if (step > currentStep) {
-            return (step, getAuctionPrice(step, currentStep));
+        if (step == _currentStep) {
+            return (_currentStep, _pricePerStep[_currentStep]);
+        } else if (step > _currentStep) {
+            return (step, _getAuctionPrice(step, _currentStep));
         } else {
             revert("Step is < current step");
         }
@@ -146,11 +145,11 @@ contract GDA is Ownable, ERC721A {
         require(quantity > 0, "Mint quantity must > 0");
         require(_totalMinted() + quantity <= collectionSize, "Will exceed maximum supply");
 
-        (uint256 auctionStep, uint256 auctionPrice) = getCurrentStepAndPrice();
+        (uint256 auctionStep, uint256 auctionPrice) = _getCurrentStepAndPrice();
         // Update auction state to the new step and new price
-        if (auctionStep > currentStep) {
+        if (auctionStep > _currentStep) {
             _pricePerStep[auctionStep] = auctionPrice;
-            currentStep = auctionStep;
+            _currentStep = auctionStep;
         }
         uint256 cost = auctionPrice * quantity;
         require(msg.value >= cost, "Insufficient payment");
