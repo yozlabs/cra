@@ -30,13 +30,13 @@ contract GDA is ERC721A {
     uint256 public expectedStepMintRate;
 
     // Current step in the auction, starts at 1
-    uint256 private _currentStep;
+    uint256 internal _currentStep;
 
     // Mapping from step to number of mints at that step
-    mapping(uint256 => uint256) private _mintsPerStep;
+    mapping(uint256 => uint256) internal _mintsPerStep;
 
     // Mapping from step to price at that step
-    mapping(uint256 => uint256) private _pricePerStep;
+    mapping(uint256 => uint256) internal _pricePerStep;
 
     constructor(
         string memory name_,

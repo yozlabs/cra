@@ -15,15 +15,27 @@ contract GDATestable is GDA {
         uint256 priceDelta_
     ) GDA(name_, symbol_, collectionSize_, duration_, stepDuration_, startPrice_, floorPrice_, priceDelta_) {}
 
-    function getStep() public view returns (uint256) {
+    function currentStep() external view returns (uint256) {
+        return _currentStep;
+    }
+
+    function mintsPerStep(uint256 index) external view returns (uint256) {
+        return _mintsPerStep[index];
+    }
+
+    function pricePerStep(uint256 index) external view returns (uint256) {
+        return _pricePerStep[index];
+    }
+
+    function getStep() external view returns (uint256) {
         return _getStep();
     }
 
-    function getAuctionPrice(uint256 currStep, uint256 prevStep) public view returns (uint256) {
+    function getAuctionPrice(uint256 currStep, uint256 prevStep) external view returns (uint256) {
         return _getAuctionPrice(currStep, prevStep);
     }
 
-    function getCurrentStepAndPrice() public view returns (uint256, uint256) {
+    function getCurrentStepAndPrice() external view returns (uint256, uint256) {
         return _getCurrentStepAndPrice();
     }
 }
