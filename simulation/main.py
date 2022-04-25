@@ -28,14 +28,13 @@ def main(proj_name):
     tape = dataframe.to_dict("records")
     for t in tape:
         q = int(t["num_minted_in_block"])
-        # ts = int(t["evt_block_timestamp"])
         ts = int(t["block_number"])
         auction.mint(ts, q)
 
     auction_data = auction.get_auction_data()
     total_minted = sum([v["minted"] for k, v in auction_data.items()])
     print(f"Total minted: {total_minted}")
-    subplot(auction_data)
+    plot(auction_data)
 
 
 def plot(auction_data):
