@@ -12,7 +12,7 @@ describe("GDA", function () {
   let gda: GDATestable;
   const name = "gda";
   const symbol = "GDA";
-  const collectionSize = 10000;
+  const collectionSize = 1000;
   const duration = 1 * 60 * 60; // One hour
   const stepDuration = 5 * 60; // 5 minutes
   const startPrice = 10000;
@@ -215,6 +215,58 @@ describe("GDA", function () {
     it("Reverts if total minted + `quantity` > `collectionSize`", async function () {
       await gda.mint(collectionSize, { value: startPrice * collectionSize });
       await expect(gda.mint(1, { value: startPrice })).to.be.revertedWith("Will exceed maximum supply");
+    });
+
+    it("Reverts if insufficient payment", async function () {
+      await expect(gda.mint(1, { value: startPrice - 1 })).to.be.revertedWith("Insufficient payment");
+    });
+
+    it("Mints 1 token", async function () {
+      const [signer] = await ethers.getSigners();
+      expect(await gda.balanceOf(signer.address)).to.equal(0);
+
+      await gda.mint(1, { value: startPrice });
+      expect(await gda.balanceOf(signer.address)).to.equal(1);
+    });
+
+    it("Mints multiple tokens", async function () {
+      const [signer] = await ethers.getSigners();
+      expect(await gda.balanceOf(signer.address)).to.equal(0);
+
+      await gda.mint(5, { value: startPrice * 5 });
+      expect(await gda.balanceOf(signer.address)).to.equal(5);
+    });
+
+    it("Sets _currentStep, _pricePerStep, and _mintsPerStep", async function () {
+      const startTime = await gda.startTime();
+      await network.provider.send("evm_setNextBlockTimestamp", [
+        startTime.toNumber() + stepDuration + stepDuration / 2,
+      ]);
+      await network.provider.send("evm_mine");
+
+      const step = await gda.getStep();
+      expect(await gda.currentStep()).to.not.equal(step);
+      expect(await gda.pricePerStep(step)).to.equal(0);
+      expect(await gda.mintsPerStep(step)).to.equal(0);
+
+      await gda.mint(1, { value: startPrice });
+      expect(await gda.currentStep()).to.equal(step);
+      expect(await gda.pricePerStep(step)).to.equal(startPrice - priceDelta);
+      expect(await gda.mintsPerStep(step)).to.equal(1);
+    });
+
+    it("Refunds overpayment", async function () {
+      const [signer] = await ethers.getSigners();
+      const balanceBefore = await signer.getBalance();
+      const mintTx = await gda.mint(1, {
+        value: startPrice * 3,
+      });
+      const mintTxReceipt = await mintTx.wait();
+      const gasCost = mintTxReceipt.gasUsed.mul(mintTxReceipt.effectiveGasPrice);
+      const balanceAfter = await signer.getBalance();
+      // The (starting balance - gas cost - ending balance) should leave only the cost of the tokens
+      // Since we mint one token and pay triple that, we should have been refunded the rest
+      expect(balanceBefore.sub(gasCost).sub(balanceAfter)).to.equal(startPrice);
     });
   });
 });
