@@ -10,6 +10,7 @@ import { GDATestable, GDATestable__factory } from "../typechain";
 describe("GDA", function () {
   let GDA: GDATestable__factory;
   let gda: GDATestable;
+
   const name = "gda";
   const symbol = "GDA";
   const collectionSize = 1000;
@@ -39,6 +40,7 @@ describe("GDA", function () {
       expect(await gda.expectedStepMintRate()).to.equal(Math.floor(collectionSize / (duration / stepDuration)));
       expect(await gda.currentStep()).to.equal(1);
       expect(await gda.pricePerStep(1)).to.equal(startPrice);
+      expect(await gda.mintsPerStep(1)).to.equal(0);
     });
   });
 
