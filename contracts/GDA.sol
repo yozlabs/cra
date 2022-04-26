@@ -8,13 +8,13 @@ contract GDA is ERC721A {
     // Size of the collection
     uint256 public collectionSize;
 
-    // Length of the auction in blocks 
+    // Length of the auction in blocks
     uint256 public duration;
 
-    // Starting block number of the auction 
+    // Starting block number of the auction
     uint256 public startBlock;
 
-    // Length of an auction step in blocks 
+    // Length of an auction step in blocks
     uint256 public stepDuration;
 
     // Starting price of the auction in wei
