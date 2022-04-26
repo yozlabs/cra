@@ -27,9 +27,9 @@ def main(proj_name):
 
     tape = dataframe.to_dict("records")
     for t in tape:
-        q = int(t["num_minted_in_block"])
-        ts = int(t["block_number"])
-        auction.mint(ts, q)
+        quantity = int(t["num_minted_in_block"])
+        curr_block = int(t["block_number"])
+        auction.mint(curr_block, quantity)
 
     auction_data = auction.get_auction_data()
     total_minted = sum([v["minted"] for k, v in auction_data.items()])
@@ -53,20 +53,6 @@ def plot(auction_data):
     num_steps = len(data_dict)
     if num_steps > 20:
         ax1.xaxis.set_major_locator(ticker.AutoLocator())
-    plt.show()
-
-
-def subplot(auction_data):
-    # Set step to string: Plotting can use categorical or numeric
-    data_dict = [{"step": str(k)} | v for k, v in auction_data.items() if v["price"]]
-    # Create the pandas DataFrame
-    dataframe = pd.DataFrame(data_dict)
-
-    sns.set_theme()
-    f, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
-    ax1.xaxis.set_major_formatter(ticker.ScalarFormatter())
-    sns.lineplot(x="step", y="price", ax=ax1, data=dataframe)
-    sns.barplot(x="step", y="minted", ax=ax2, data=dataframe, color="g", alpha=0.5)
     plt.show()
 
 

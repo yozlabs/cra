@@ -10,7 +10,7 @@ class GDA:
 
     def __init__(
         self,
-        start_time,
+        start_block,
         duration,
         step_duration,
         start_price,
@@ -18,7 +18,7 @@ class GDA:
         price_delta,
         expected_step_mint_rate,
     ):
-        self.start_time = start_time
+        self.start_block = start_block
         self.duration = duration
         self.step_duration = step_duration
         self.start_price = start_price
@@ -30,14 +30,14 @@ class GDA:
         self._current_step = 1
         self._step_minted_price_dict[1]["price"] = start_price
 
-    def _get_step(self, curr_time):
+    def _get_step(self, curr_block):
         """Get the current step based on current time and elapsed time."""
-        if curr_time > self.start_time + self.duration:
-            elapsed_time = self.duration
+        if curr_block > self.start_block + self.duration:
+            elapsed_blocks = self.duration
         else:
-            elapsed_time = curr_time - self.start_time
+            elapsed_blocks = curr_block - self.start_block
 
-        return math.ceil(elapsed_time / self.step_duration) or 1
+        return math.ceil(elapsed_blocks / self.step_duration) or 1
 
     def _get_auction_price(self, curr_step, prev_step):
         """Calculate the auction price at the current step from the current step and the previous one."""
@@ -83,13 +83,13 @@ class GDA:
         """Get the step data from the auction."""
         return self._step_minted_price_dict
 
-    def mint(self, curr_time, quantity):
+    def mint(self, curr_block, quantity):
         """Fake mint a quantity of tokens at the current time."""
-        if curr_time > self.start_time + self.duration:
+        if curr_block > self.start_block + self.duration:
             # Auction is over
             return
 
-        step, price = self._get_curr_step_and_price(curr_time)
+        step, price = self._get_curr_step_and_price(curr_block)
         if step > self._current_step:
             self._step_minted_price_dict[step]["price"] = price
             self._current_step = step
