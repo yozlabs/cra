@@ -10,12 +10,13 @@ import { GDATestable, GDATestable__factory } from "../typechain";
 describe("GDA", function () {
   let GDA: GDATestable__factory;
   let gda: GDATestable;
+  let startBlock: number;
 
   const name = "gda";
   const symbol = "GDA";
   const collectionSize = 1000;
-  const duration = 1 * 60 * 60; // One hour
-  const stepDuration = 5 * 60; // 5 minutes
+  const duration = 20; // in blocks
+  const stepDuration = 2; // in blocks
   const startPrice = 10000;
   const floorPrice = 5000;
   const priceDelta = 500;
@@ -25,6 +26,9 @@ describe("GDA", function () {
     gda = await GDA.deploy(name, symbol, collectionSize, duration, stepDuration, startPrice, floorPrice, priceDelta);
 
     await gda.deployed();
+
+    const latestBlock = await ethers.provider.getBlock("latest");
+    startBlock = latestBlock.number;
   });
 
   describe("constructor", function () {
@@ -33,6 +37,7 @@ describe("GDA", function () {
       expect(await gda.symbol()).to.equal(symbol);
       expect(await gda.collectionSize()).to.equal(collectionSize);
       expect(await gda.duration()).to.equal(duration);
+      expect(await gda.startBlock()).to.equal(startBlock);
       expect(await gda.stepDuration()).to.equal(stepDuration);
       expect(await gda.startPrice()).to.equal(startPrice);
       expect(await gda.floorPrice()).to.equal(floorPrice);
@@ -45,61 +50,58 @@ describe("GDA", function () {
   });
 
   describe("_getStep", function () {
-    it("Returns first step if block time == `startTime`", async function () {
+    it("Returns first step if block number == `startBlock`", async function () {
       const latestBlock = await ethers.provider.getBlock("latest");
-      expect(latestBlock.timestamp).to.equal(await gda.startTime());
+      expect(latestBlock.number).to.equal(await gda.startBlock());
       expect(await gda.getStep()).to.equal(1);
     });
 
-    it("Returns first step if block time > `startTime` and block time < `startTime` + `stepDuration`", async function () {
-      const startTime = await gda.startTime();
-      await network.provider.send("evm_setNextBlockTimestamp", [startTime.toNumber() + stepDuration / 2]);
+    it("Returns first step if block number > `startBlock` and block number < `startBlock` + `stepDuration`", async function () {
       await network.provider.send("evm_mine");
 
       const latestBlock = await ethers.provider.getBlock("latest");
-      expect(latestBlock.timestamp).to.equal(startTime.add(stepDuration / 2));
+      expect(latestBlock.number).to.be.gt(startBlock);
+      expect(latestBlock.number).to.be.lt(startBlock + stepDuration);
       expect(await gda.getStep()).to.equal(1);
     });
 
-    it("Returns first step if block time == `startTime` + `stepDuration`", async function () {
-      const startTime = await gda.startTime();
-      await network.provider.send("evm_setNextBlockTimestamp", [startTime.toNumber() + stepDuration]);
-      await network.provider.send("evm_mine");
+    it("Returns first step if block number == `startBlock` + `stepDuration`", async function () {
+      for (let i = 0; i < stepDuration; i++) {
+        await network.provider.send("evm_mine");
+      }
 
       const latestBlock = await ethers.provider.getBlock("latest");
-      expect(latestBlock.timestamp).to.equal(startTime.add(stepDuration));
+      expect(latestBlock.number).to.equal(startBlock + stepDuration);
       expect(await gda.getStep()).to.equal(1);
     });
 
-    it("Returns second step if block time > `startTime` + `stepDuration` and block time < `startTime` + `stepDuration` * 2", async function () {
-      const startTime = await gda.startTime();
-      await network.provider.send("evm_setNextBlockTimestamp", [
-        startTime.toNumber() + stepDuration + stepDuration / 2,
-      ]);
-      await network.provider.send("evm_mine");
+    it("Returns second step if block number > `startBlock + `stepDuration` and block number < `startBlock` + `stepDuration` * 2", async function () {
+      for (let i = 0; i < stepDuration + 1; i++) {
+        await network.provider.send("evm_mine");
+      }
 
       const latestBlock = await ethers.provider.getBlock("latest");
-      expect(latestBlock.timestamp).to.equal(startTime.add(stepDuration + stepDuration / 2));
+      expect(latestBlock.number).to.equal(startBlock + stepDuration + 1);
       expect(await gda.getStep()).to.equal(2);
     });
 
-    it("Returns last step if block time == `startTime` + `duration`", async function () {
-      const startTime = await gda.startTime();
-      await network.provider.send("evm_setNextBlockTimestamp", [startTime.toNumber() + duration]);
-      await network.provider.send("evm_mine");
+    it("Returns last step if block number == `startBlock` + `duration`", async function () {
+      for (let i = 0; i < duration; i++) {
+        await network.provider.send("evm_mine");
+      }
 
       const latestBlock = await ethers.provider.getBlock("latest");
-      expect(latestBlock.timestamp).to.equal(startTime.add(duration));
+      expect(latestBlock.number).to.equal(startBlock + duration);
       expect(await gda.getStep()).to.equal(duration / stepDuration);
     });
 
-    it("Returns last step if block time > `startTime` + `duration`", async function () {
-      const startTime = await gda.startTime();
-      await network.provider.send("evm_setNextBlockTimestamp", [startTime.toNumber() + duration * 2]);
-      await network.provider.send("evm_mine");
+    it("Returns last step if block number > `startBlock` + `duration`", async function () {
+      for (let i = 0; i < duration * 2; i++) {
+        await network.provider.send("evm_mine");
+      }
 
       const latestBlock = await ethers.provider.getBlock("latest");
-      expect(latestBlock.timestamp).to.equal(startTime.add(duration * 2));
+      expect(latestBlock.number).to.equal(startBlock + duration * 2);
       expect(await gda.getStep()).to.equal(duration / stepDuration);
     });
   });
@@ -126,7 +128,7 @@ describe("GDA", function () {
       const quantity = (await gda.expectedStepMintRate()).sub(1);
       await gda.mint(quantity, { value: quantity.mul(startPrice) });
 
-      const startTime = await gda.startTime();
+      const startTime = await gda.startBlock();
       await network.provider.send("evm_setNextBlockTimestamp", [
         startTime.toNumber() + stepDuration + stepDuration / 2,
       ]);
@@ -139,7 +141,7 @@ describe("GDA", function () {
       const quantity = await gda.expectedStepMintRate();
       await gda.mint(quantity, { value: quantity.mul(startPrice) });
 
-      const startTime = await gda.startTime();
+      const startTime = await gda.startBlock();
       await network.provider.send("evm_setNextBlockTimestamp", [
         startTime.toNumber() + stepDuration + stepDuration / 2,
       ]);
@@ -152,7 +154,7 @@ describe("GDA", function () {
       const quantity = (await gda.expectedStepMintRate()).add(1);
       await gda.mint(quantity, { value: quantity.mul(startPrice) });
 
-      const startTime = await gda.startTime();
+      const startTime = await gda.startBlock();
       await network.provider.send("evm_setNextBlockTimestamp", [
         startTime.toNumber() + stepDuration + stepDuration / 2,
       ]);
@@ -184,7 +186,7 @@ describe("GDA", function () {
     });
 
     it("Returns current step and price if calculated step > `_currentStep`", async function () {
-      const startTime = await gda.startTime();
+      const startTime = await gda.startBlock();
       await network.provider.send("evm_setNextBlockTimestamp", [
         startTime.toNumber() + stepDuration + stepDuration / 2,
       ]);
@@ -199,7 +201,7 @@ describe("GDA", function () {
     });
 
     it("Returns last step and price if block time > `startTime` + `duration`", async function () {
-      const startTime = await gda.startTime();
+      const startTime = await gda.startBlock();
       await network.provider.send("evm_setNextBlockTimestamp", [startTime.toNumber() + duration * 2]);
       await network.provider.send("evm_mine");
 
@@ -240,7 +242,7 @@ describe("GDA", function () {
     });
 
     it("Sets _currentStep, _pricePerStep, and _mintsPerStep", async function () {
-      const startTime = await gda.startTime();
+      const startTime = await gda.startBlock();
       await network.provider.send("evm_setNextBlockTimestamp", [
         startTime.toNumber() + stepDuration + stepDuration / 2,
       ]);
