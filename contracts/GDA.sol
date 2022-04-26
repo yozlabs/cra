@@ -8,13 +8,13 @@ contract GDA is ERC721A {
     // Size of the collection
     uint256 public collectionSize;
 
-    // Length of the auction in seconds
+    // Length of the auction in blocks 
     uint256 public duration;
 
-    // Start time as timestamp in seconds
-    uint256 public startTime;
+    // Starting block number of the auction 
+    uint256 public startBlock;
 
-    // Length of an auction step in seconds
+    // Length of an auction step in blocks 
     uint256 public stepDuration;
 
     // Starting price of the auction in wei
@@ -50,7 +50,7 @@ contract GDA is ERC721A {
     ) ERC721A(name_, symbol_) {
         collectionSize = collectionSize_;
         duration = duration_;
-        startTime = block.timestamp;
+        startBlock = block.number;
         stepDuration = stepDuration_;
         startPrice = startPrice_;
         floorPrice = floorPrice_;
@@ -67,11 +67,11 @@ contract GDA is ERC721A {
      * @dev Get the current step of the auction based on the elapsed time.
      */
     function _getStep() internal view returns (uint256) {
-        uint256 elapsedTime = duration;
-        if (startTime + duration > block.timestamp) {
-            elapsedTime = block.timestamp - startTime;
+        uint256 elapsedBlocks = duration;
+        if (startBlock + duration > block.number) {
+            elapsedBlocks = block.number - startBlock;
         }
-        uint256 step = Math.ceilDiv(elapsedTime, stepDuration);
+        uint256 step = Math.ceilDiv(elapsedBlocks, stepDuration);
 
         // Steps start at 1
         return step > 0 ? step : 1;
