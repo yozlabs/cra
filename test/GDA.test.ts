@@ -128,10 +128,6 @@ describe("GDA", function () {
       const quantity = (await gda.expectedStepMintRate()).sub(1);
       await gda.mint(quantity, { value: quantity.mul(startPrice) });
 
-      const startTime = await gda.startBlock();
-      await network.provider.send("evm_setNextBlockTimestamp", [
-        startTime.toNumber() + stepDuration + stepDuration / 2,
-      ]);
       await network.provider.send("evm_mine");
 
       expect(await gda.getAuctionPrice(2, 1)).to.equal(startPrice - priceDelta);
@@ -141,10 +137,6 @@ describe("GDA", function () {
       const quantity = await gda.expectedStepMintRate();
       await gda.mint(quantity, { value: quantity.mul(startPrice) });
 
-      const startTime = await gda.startBlock();
-      await network.provider.send("evm_setNextBlockTimestamp", [
-        startTime.toNumber() + stepDuration + stepDuration / 2,
-      ]);
       await network.provider.send("evm_mine");
 
       expect(await gda.getAuctionPrice(2, 1)).to.equal(startPrice);
@@ -154,10 +146,6 @@ describe("GDA", function () {
       const quantity = (await gda.expectedStepMintRate()).add(1);
       await gda.mint(quantity, { value: quantity.mul(startPrice) });
 
-      const startTime = await gda.startBlock();
-      await network.provider.send("evm_setNextBlockTimestamp", [
-        startTime.toNumber() + stepDuration + stepDuration / 2,
-      ]);
       await network.provider.send("evm_mine");
 
       expect(await gda.getAuctionPrice(2, 1)).to.equal(startPrice + priceDelta);
