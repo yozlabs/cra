@@ -81,8 +81,8 @@ contract GDA is ERC721A {
      * @dev Returns the current auction price given the current and previous step.
      */
     function _getAuctionPrice(uint256 currStep, uint256 prevStep) internal view returns (uint256) {
-        require(prevStep <= _currentStep, "prevStep must <= _currentStep");
         require(prevStep > 0, "prevStep must > 0");
+        require(_currentStep >= prevStep, "_currentStep must >= prevStep");
         require(currStep >= prevStep, "currStep must >= prevStep");
 
         uint256 price = _pricePerStep[prevStep];

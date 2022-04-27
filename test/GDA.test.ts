@@ -108,15 +108,15 @@ describe("GDA", function () {
   });
 
   describe("_getAuctionPrice", function () {
-    it("Reverts if `prevStep` > `_currentStep`", async function () {
-      const _currentStep = await gda.currentStep();
-      await expect(gda.getAuctionPrice(_currentStep.add(2), _currentStep.add(1))).to.be.revertedWith(
-        "prevStep must <= _currentStep"
-      );
-    });
-
     it("Reverts if `prevStep` == 0", async function () {
       await expect(gda.getAuctionPrice(1, 0)).to.be.revertedWith("prevStep must > 0");
+    });
+
+    it("Reverts if `_currentStep` < `prevStep`", async function () {
+      const _currentStep = await gda.currentStep();
+      await expect(gda.getAuctionPrice(_currentStep.add(2), _currentStep.add(1))).to.be.revertedWith(
+        "_currentStep must >= prevStep"
+      );
     });
 
     it("Reverts if `currStep` < `prevStep`", async function () {
