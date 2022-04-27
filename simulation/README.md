@@ -1,18 +1,28 @@
 # Simulation of GDA
 
-This folder contains a python port of the pricing model for GDA. We use it to simulate this pricing model on historical mint data.
-The two data sets that are included are from the Azuki 1/12/2022 mint and the Moonbirds 4/16/2022 mint.
+This folder contains a Python simulation of the pricing model for GDA. We applied our pricing model to historical mint data to see the impact the model has on the price curve. We used Dune analytics to pull the historical data and provide links to the original queries below.
 
-To run the simulation, you can do the following:
+The NFT project mints we use are the following:
 
-1. We use Poetry for Python depedency management so install Poetry if you haven't already.
+Project Name | Dune Analytics | Mint Date
+--- | --- | ---
+Azuki | https://dune.com/queries/632316 | 2022-01-12
+Moonbirds | https://dune.com/queries/632447 | 2022-04-15
 
+
+## How to run the simulation
+This requires Python 3 and Poetry for dependency management.
+
+### Install Poetry
+You can find instructions to install Poetry here:
 https://python-poetry.org/docs/#installation
 
-2. Use Poetry to install dependencies
+### Use Poetry to install dependencies
+```bash
+poetry install
+```
 
-    ```poetry install```
-
-3. Run the script `main.py` with a project name:
-
-    ```poetry run python main.py azuki```
+### Run simulation
+```bash
+poetry run python main.py <project-name>
+```
