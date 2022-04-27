@@ -29,7 +29,8 @@ jobs:
         run: yarn compile
       - name: Run tests
         run: yarn test
-      - name: Run static analysis
-        with:
-          node-version: 16
+      - name: Run slither
         uses: crytic/slither-action@v0.1.1
+        with:
+          ignore-compile: true
+          node-version: 14

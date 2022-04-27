@@ -1,11 +1,14 @@
 name: Slither Analysis
 on: [push]
 jobs:
-  analyze:
+  run-analysis:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Build the contracts
+        run: yarn compile
       - uses: crytic/slither-action@v0.1.1
         with:
-          node-version: 14
           ignore-compile: true
+          node-version: 14
