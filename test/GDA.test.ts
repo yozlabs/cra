@@ -15,7 +15,7 @@ describe("GDA", function () {
   const name = "gda";
   const symbol = "GDA";
   const collectionSize = 1000;
-  const duration = 20; // in blocks
+  const duration = 30; // in blocks
   const stepDuration = 2; // in blocks
   const startPrice = 10000;
   const floorPrice = 5000;
@@ -81,7 +81,8 @@ describe("GDA", function () {
       }
 
       const latestBlock = await ethers.provider.getBlock("latest");
-      expect(latestBlock.number).to.equal(startBlock + stepDuration + 1);
+      expect(latestBlock.number).to.be.gt(startBlock + stepDuration);
+      expect(latestBlock.number).to.be.lt(startBlock + stepDuration * 2);
       expect(await gda.getStep()).to.equal(2);
     });
 
@@ -101,15 +102,17 @@ describe("GDA", function () {
       }
 
       const latestBlock = await ethers.provider.getBlock("latest");
-      expect(latestBlock.number).to.equal(startBlock + duration * 2);
+      expect(latestBlock.number).to.be.gt(startBlock + duration);
       expect(await gda.getStep()).to.equal(duration / stepDuration);
     });
   });
 
   describe("_getAuctionPrice", function () {
     it("Reverts if `prevStep` > `_currentStep`", async function () {
-      expect(await gda.currentStep()).to.equal(1);
-      await expect(gda.getAuctionPrice(3, 2)).to.be.revertedWith("prevStep must <= _currentStep");
+      const _currentStep = await gda.currentStep();
+      await expect(gda.getAuctionPrice(_currentStep.add(2), _currentStep.add(1))).to.be.revertedWith(
+        "prevStep must <= _currentStep"
+      );
     });
 
     it("Reverts if `prevStep` == 0", async function () {
@@ -128,8 +131,6 @@ describe("GDA", function () {
       const quantity = (await gda.expectedStepMintRate()).sub(1);
       await gda.mint(quantity, { value: quantity.mul(startPrice) });
 
-      await network.provider.send("evm_mine");
-
       expect(await gda.getAuctionPrice(2, 1)).to.equal(startPrice - priceDelta);
     });
 
@@ -137,16 +138,12 @@ describe("GDA", function () {
       const quantity = await gda.expectedStepMintRate();
       await gda.mint(quantity, { value: quantity.mul(startPrice) });
 
-      await network.provider.send("evm_mine");
-
       expect(await gda.getAuctionPrice(2, 1)).to.equal(startPrice);
     });
 
     it("Returns higher price after 1 step if number minted > `expectedStepMintRate`", async function () {
       const quantity = (await gda.expectedStepMintRate()).add(1);
       await gda.mint(quantity, { value: quantity.mul(startPrice) });
-
-      await network.provider.send("evm_mine");
 
       expect(await gda.getAuctionPrice(2, 1)).to.equal(startPrice + priceDelta);
     });
@@ -159,26 +156,25 @@ describe("GDA", function () {
 
     it("Returns floor price and stops decreasing price after multiple steps", async function () {
       const numStepsUntilFloor = (startPrice - floorPrice) / priceDelta;
+      expect(await gda.getAuctionPrice(1 + numStepsUntilFloor, 1)).to.equal(floorPrice);
       expect(await gda.getAuctionPrice(1 + numStepsUntilFloor + 2, 1)).to.equal(floorPrice);
     });
   });
 
   describe("_getCurrentStepAndPrice", function () {
-    it("Returns current step and price if calculated step == `_currentStep`", async function () {
+    it("Returns correct step and price if calculated step == `_currentStep`", async function () {
       const _currentStep = await gda.currentStep();
       expect(await gda.getStep()).to.equal(_currentStep);
 
       const [step, price] = await gda.getCurrentStepAndPrice();
-      expect(step).to.equal(_currentStep);
+      expect(step).to.equal(await gda.getStep());
       expect(price).to.equal(startPrice);
     });
 
-    it("Returns current step and price if calculated step > `_currentStep`", async function () {
-      const startTime = await gda.startBlock();
-      await network.provider.send("evm_setNextBlockTimestamp", [
-        startTime.toNumber() + stepDuration + stepDuration / 2,
-      ]);
-      await network.provider.send("evm_mine");
+    it("Returns correct step and price if calculated step > `_currentStep`", async function () {
+      for (let i = 0; i < stepDuration + 1; i++) {
+        await network.provider.send("evm_mine");
+      }
 
       const _currentStep = await gda.currentStep();
       expect(await gda.getStep()).to.be.gt(_currentStep);
@@ -188,10 +184,13 @@ describe("GDA", function () {
       expect(price).to.equal(startPrice - priceDelta);
     });
 
-    it("Returns last step and price if block time > `startTime` + `duration`", async function () {
-      const startTime = await gda.startBlock();
-      await network.provider.send("evm_setNextBlockTimestamp", [startTime.toNumber() + duration * 2]);
-      await network.provider.send("evm_mine");
+    it("Returns last step and price if block number > `startBlock` + `duration`", async function () {
+      for (let i = 0; i < duration * 2; i++) {
+        await network.provider.send("evm_mine");
+      }
+
+      const latestBlock = await ethers.provider.getBlock("latest");
+      expect(latestBlock.number).to.be.gt(startBlock + duration);
 
       const [step, price] = await gda.getCurrentStepAndPrice();
       expect(step).to.equal(duration / stepDuration);
@@ -230,11 +229,9 @@ describe("GDA", function () {
     });
 
     it("Sets _currentStep, _pricePerStep, and _mintsPerStep", async function () {
-      const startTime = await gda.startBlock();
-      await network.provider.send("evm_setNextBlockTimestamp", [
-        startTime.toNumber() + stepDuration + stepDuration / 2,
-      ]);
-      await network.provider.send("evm_mine");
+      for (let i = 0; i < stepDuration + 1; i++) {
+        await network.provider.send("evm_mine");
+      }
 
       const step = await gda.getStep();
       expect(await gda.currentStep()).to.not.equal(step);
