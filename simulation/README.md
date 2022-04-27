@@ -8,8 +8,8 @@ The NFT project mints we use are the following:
 
 Project Name | Dune Analytics | Mint Date
 --- | --- | ---
-Azuki | https://dune.com/queries/632316 | 2022-01-12
-Moonbirds | https://dune.com/queries/632447 | 2022-04-15
+azuki | https://dune.com/queries/632316 | 2022-01-12
+moonbirds | https://dune.com/queries/632447 | 2022-04-15
 
 
 ## How to run the simulation
