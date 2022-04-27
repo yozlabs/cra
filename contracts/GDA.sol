@@ -30,13 +30,13 @@ contract GDA is ERC721A {
     uint256 public expectedStepMintRate;
 
     // Current step in the auction, starts at 1
-    uint256 private _currentStep;
+    uint256 internal _currentStep;
 
     // Mapping from step to number of mints at that step
-    mapping(uint256 => uint256) private _mintsPerStep;
+    mapping(uint256 => uint256) internal _mintsPerStep;
 
     // Mapping from step to price at that step
-    mapping(uint256 => uint256) private _pricePerStep;
+    mapping(uint256 => uint256) internal _pricePerStep;
 
     constructor(
         string memory name_,
@@ -81,6 +81,10 @@ contract GDA is ERC721A {
      * @dev Returns the current auction price given the current and previous step.
      */
     function _getAuctionPrice(uint256 currStep, uint256 prevStep) internal view returns (uint256) {
+        require(prevStep > 0, "prevStep must > 0");
+        require(_currentStep >= prevStep, "_currentStep must >= prevStep");
+        require(currStep >= prevStep, "currStep must >= prevStep");
+
         uint256 price = _pricePerStep[prevStep];
         uint256 passedSteps = currStep - prevStep;
         uint256 numMinted;

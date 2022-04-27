@@ -25,5 +25,7 @@ jobs:
           yarn install
       - name: Run lint check
         run: yarn run lint:check
+      - name: Run contract compilation
+        run: yarn compile
       - name: Run tests
         run: yarn test
