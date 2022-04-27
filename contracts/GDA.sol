@@ -154,8 +154,8 @@ contract GDA is ERC721A {
         uint256 cost = auctionPrice * quantity;
         require(msg.value >= cost, "Insufficient payment");
 
-        _safeMint(msg.sender, quantity);
         _mintsPerStep[auctionStep] += quantity;
+        _safeMint(msg.sender, quantity);
 
         if (msg.value > cost) {
             (bool success, ) = msg.sender.call{value: msg.value - cost}("");
