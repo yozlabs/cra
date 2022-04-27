@@ -4,7 +4,7 @@
 
 This repository contains a variant of [the Gradual Duction Auction mechanism proposed by Paradigm](https://www.paradigm.xyz/2022/04/gda).
 
-## Getting Started (TODO)
+## Getting Started
 
 Clone the repository with:
 
