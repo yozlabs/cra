@@ -43,7 +43,7 @@ let gda = await ethers.getContractAt("GDA", "<contract address>");
 Get the current auction price:
 
 ```
-let currentPrice = await gda.getAuctionPrice();
+let currentPrice = await gda.getCurrentAuctionPrice();
 ```
 
 Mint an NFT:
