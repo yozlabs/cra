@@ -24,18 +24,59 @@ In another terminal, deploy the contract with:
 npx hardhat run scripts/deployGDA.ts --network localhost
 ```
 
+Make sure to copy the contract address to your clipboard.
+
 To make contract calls and test the contract, run:
 
 ```
 npx hardhat console --network localhost
 ```
 
+### Usage
+
+Load the contract using the contract address from above:
+
+```
+let gda = await ethers.getContractAt("GDA", "<contract address>");
+```
+
+Get the current auction price:
+
+```
+let currentPrice = await gda.getAuctionPrice();
+```
+
+Mint an NFT:
+
+```
+await gda.mint(1, {value: currentPrice})
+```
+
+Confirm an NFT was minted to your address:
+
+```
+const [signer] = await ethers.getSigners();
+
+// Should return 1
+await gda.balanceOf(signer.address);
+```
+
 ### Testing
+
+Compile the contract with:
+
+```
+
+yarn compile
+
+```
 
 Run tests with:
 
 ```
+
 yarn test
+
 ```
 
 ## Rationale - The Problem
@@ -51,3 +92,7 @@ However, a traditional dutch auction is still open to problems around having an 
 A Gradual Dutch Auction (GDA) varies from a traditional dutch auction in allowing the price to _increase_, as opposed to just decreasing the price.
 
 If demand for the NFT collection is lower than expected, the minting contract automatically lowers the price to ensure sufficient demand - just like a traditional dutch auction. However, if demand is higher than expected, the contract can adjust the price upwards, to ensure value is captured by the project and not by resellers, or by miners through excessive gas fees.
+
+```
+
+```

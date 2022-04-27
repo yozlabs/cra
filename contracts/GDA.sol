@@ -129,6 +129,15 @@ contract GDA is ERC721A {
     }
 
     /**
+     * @dev Returns the current auction price.
+     */
+    function getAuctionPrice() external view returns (uint256) {
+        (, uint256 price) = _getCurrentStepAndPrice();
+
+        return price;
+    }
+
+    /**
      * @dev Mints `quantity` of tokens and transfers them to the sender.
      * If the sender sends more ETH than needed, it refunds them.
      */
