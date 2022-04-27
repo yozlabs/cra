@@ -7,13 +7,12 @@ SIM_DATA_PATH = "./sim_data"
 PROJ_CONFIG = {
     "azuki": {
         "csv_data_file": "azuki-6360cf85-97e9-4cb5-80e6-4240f2a2d59d.csv",
-        # https://www.azuki.com/mintinfo
         "auction_config": {
             "collection_size": 9800,
             "start_time": 1642010410,  # timestamp
             "start_block": 13992202,  # block number
-            "duration": 600,  # block
-            "step_duration": 1,  # block
+            "duration": 600,  # blocks
+            "step_duration": 1,  # blocks
             "start_price": 1 * 10**18,
             "floor_price": 0.15 * 10**18,
             "price_delta": 0.05 * 10**18,
@@ -22,13 +21,12 @@ PROJ_CONFIG = {
     },
     "moonbirds": {
         "csv_data_file": "moonbirds-8f01836d-d6e5-44d0-94e3-3e9ef70855d8.csv",
-        # https://twitter.com/Abraham_L_L/status/1510694478826246145
         "auction_config": {
             "collection_size": 7875,
             "start_time": 1650121200,  # timestamp
-            "start_block": 14597004,  # block number
-            "duration": 600,  # 6 hrs
-            "step_duration": 3,  # 5 mins
+            "start_block": 14597286,  # block number
+            "duration": 200,  # blocks
+            "step_duration": 3,  # blocks
             "start_price": 2.5 * 10**18,
             "floor_price": 0.1 * 10**18,
             "price_delta": 0.1 * 10**18,
