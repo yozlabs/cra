@@ -29,3 +29,5 @@ jobs:
         run: yarn compile
       - name: Run tests
         run: yarn test
+      - name: Run static analysis
+      - uses: crytic/slither-action@v0.1.1
