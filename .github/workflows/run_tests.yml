@@ -30,4 +30,6 @@ jobs:
       - name: Run tests
         run: yarn test
       - name: Run static analysis
+        with:
+          node-version: 16
         uses: crytic/slither-action@v0.1.1
