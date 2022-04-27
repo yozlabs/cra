@@ -31,7 +31,7 @@ class GDA:
         self._step_minted_price_dict[1]["price"] = start_price
 
     def _get_step(self, curr_block):
-        """Get the current step based on current time and elapsed time."""
+        """Get the current step based on current block and elapsed blocks."""
         if curr_block > self.start_block + self.duration:
             elapsed_blocks = self.duration
         else:
@@ -84,7 +84,7 @@ class GDA:
         return self._step_minted_price_dict
 
     def mint(self, curr_block, quantity):
-        """Fake mint a quantity of tokens at the current time."""
+        """Fake mint a quantity of tokens at the current block."""
         if curr_block > self.start_block + self.duration:
             # Auction is over
             return
