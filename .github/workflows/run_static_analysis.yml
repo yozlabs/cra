@@ -1,4 +1,4 @@
-name: Slither Analysis
+name: CI - Static Analysis
 on: [push]
 jobs:
   run-analysis:
@@ -6,9 +6,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Build the contracts
-        run: yarn compile
+      - name: Static analysis
         uses: crytic/slither-action@v0.1.1
         with:
-          ignore-compile: true
           node-version: 14

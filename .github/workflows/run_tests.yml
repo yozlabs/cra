@@ -1,4 +1,4 @@
-name: CI
+name: CI - Tests
 on:
   push:
     branches: [main]
@@ -29,9 +29,3 @@ jobs:
         run: yarn compile
       - name: Run tests
         run: yarn test
-      - name: Run slither
-        uses: crytic/slither-action@v0.1.1
-        with:
-          ignore-compile: true
-          node-version: 14
-          slither-args: [solc-disable-warnings]
