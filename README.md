@@ -1,20 +1,19 @@
-[![ci](https://github.com/yozlabs/gda/actions/workflows/run_tests.yml/badge.svg)](https://github.com/yozlabs/gda/actions/workflows/run_tests.yml)
-[![slither](https://github.com/yozlabs/gda/actions/workflows/run_static_analysis.yml/badge.svg)](https://github.com/yozlabs/gda/actions/workflows/run_static_analysis.yml)
+[![ci](https://github.com/yozlabs/nza/actions/workflows/run_tests.yml/badge.svg)](https://github.com/yozlabs/gda/actions/workflows/run_tests.yml)
+[![slither](https://github.com/yozlabs/nza/actions/workflows/run_static_analysis.yml/badge.svg)](https://github.com/yozlabs/gda/actions/workflows/run_static_analysis.yml)
 
+# New Zealand Auction - (Reference Implementation)
 
-# Gradual Dutch Auction - (Reference Implementation)
-
-This repository contains a variant of [the Gradual Duction Auction mechanism proposed by Paradigm](https://www.paradigm.xyz/2022/04/gda).
+This repository contains a variant of [the Gradual Duction Auction mechanism proposed by Paradigm](https://www.paradigm.xyz/2022/04/nza).
 
 ## Getting Started
 
 Clone the repository with:
 
 ```
-git clone git@github.com:yozlabs/gda.git
+git clone git@github.com:yozlabs/nza-reference.git
 ```
 
-From the `gda` repo run a Hardhat node with:
+From the `nza-reference` repo run a Hardhat node with:
 
 ```
 npx hardhat node
@@ -23,7 +22,7 @@ npx hardhat node
 In another terminal, deploy the contract with:
 
 ```
-npx hardhat run scripts/deployGDA.ts --network localhost
+npx hardhat run scripts/deployNZA.ts --network localhost
 ```
 
 Make sure to copy the contract address to your clipboard.
@@ -39,19 +38,19 @@ npx hardhat console --network localhost
 Load the contract using the contract address from above:
 
 ```
-let gda = await ethers.getContractAt("GDA", "<contract address>");
+let nza = await ethers.getContractAt("NZA", "<contract address>");
 ```
 
 Get the current auction price:
 
 ```
-let currentPrice = await gda.getCurrentAuctionPrice();
+let currentPrice = await nza.getCurrentAuctionPrice();
 ```
 
 Mint an NFT:
 
 ```
-await gda.mint(1, {value: currentPrice})
+await nza.mint(1, {value: currentPrice})
 ```
 
 Confirm an NFT was minted to your address:
@@ -60,7 +59,7 @@ Confirm an NFT was minted to your address:
 const [signer] = await ethers.getSigners();
 
 // Should return 1
-await gda.balanceOf(signer.address);
+await nza.balanceOf(signer.address);
 ```
 
 ### Testing
@@ -87,6 +86,6 @@ However, a traditional dutch auction is still open to problems around having an 
 
 ### Solution
 
-A Gradual Dutch Auction (GDA) varies from a traditional dutch auction in allowing the price to _increase_, as opposed to just decreasing the price.
+A New Zealand Auction (NZA) varies from a traditional Dutch Auction in allowing the price to _increase_, as opposed to just decreasing the price.
 
-If demand for the NFT collection is lower than expected, the minting contract automatically lowers the price to ensure sufficient demand - just like a traditional dutch auction. However, if demand is higher than expected, the contract can adjust the price upwards, to ensure value is captured by the project and not by resellers, or by miners through excessive gas fees.
+If demand for the NFT collection is lower than expected, the minting contract automatically lowers the price to ensure sufficient demand - just like a traditional Dutch Auction. However, if demand is higher than expected, the contract can adjust the price upwards, to ensure value is captured by the project and not by resellers, or by miners through excessive gas fees.
