@@ -73,6 +73,13 @@ contract GDA is ERC721A {
      * @dev Get the current step of the auction based on the elapsed time.
      */
     function _getStep() internal view returns (uint256) {
+        // Note: In this implementation, this can never happen
+        // because startBlock is always set to the block.number on deploy
+        // in the constructor - but a production version of this contract
+        // would want to explicitly set the startBlock of the auction
+        //
+        require(block.number >= startBlock, "Auction has not started!");
+
         uint256 elapsedBlocks = block.number - startBlock;
 
         // The auction can't last longer than the auction's duration
@@ -128,6 +135,10 @@ contract GDA is ERC721A {
     function _getCurrentStepAndPrice() internal view returns (uint256, uint256) {
         uint256 step = _getStep();
 
+        // '_currentStep' is stored in state
+        // whileas 'step' is computed on-demand based on the current block.
+        //
+        // So, this statement is always true.
         assert(step >= _currentStep);
 
         // False positive guarding against using strict equality checks
