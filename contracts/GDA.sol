@@ -51,7 +51,7 @@ contract GDA is ERC721A {
         require(collectionSize_ > 0, "collectionSize_ must be > 0");
         require(duration_ > 0, "duration_ must be > 0");
         require(stepDuration_ > 0, "stepDuration_ must be > 0");
-        require(startPrice_ >= floorPrice_, "startPrice_ must be >= floorPrice");
+        require(startPrice_ >= floorPrice_, "startPrice_ must be >= floorPrice_");
         require(priceDelta_ > 0, "priceDelta_ must be > 0");
 
         collectionSize = collectionSize_;
