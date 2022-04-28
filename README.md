@@ -1,4 +1,6 @@
 [![ci](https://github.com/yozlabs/gda/actions/workflows/run_tests.yml/badge.svg)](https://github.com/yozlabs/gda/actions/workflows/run_tests.yml)
+[![slither](https://github.com/yozlabs/gda/actions/workflows/run_static_analysis.yml/badge.svg)](https://github.com/yozlabs/gda/actions/workflows/run_static_analysis.yml)
+
 
 # Gradual Dutch Auction - (Reference Implementation)
 
