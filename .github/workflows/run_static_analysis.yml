@@ -13,5 +13,5 @@ jobs:
       - name: Static analysis
         uses: crytic/slither-action@v0.1.1
         with:
-          node-version: 14
+          node-version: 16
           slither-args: --exclude-dependencies --exclude-informational
