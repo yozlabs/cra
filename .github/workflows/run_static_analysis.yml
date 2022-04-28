@@ -1,4 +1,4 @@
-name: CI - Static Analysis
+name: Slither
 on:
   push:
     branches: [main]
