@@ -34,3 +34,4 @@ jobs:
         with:
           ignore-compile: true
           node-version: 14
+          slither-args: [solc-disable-warnings]
