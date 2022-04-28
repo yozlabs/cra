@@ -120,7 +120,7 @@ contract GDA is ERC721A {
         uint256 step = _getStep();
 
         // False positive guarding against using strict equality checks
-        // Shouldn't be a problem here because we check for > and < as well 
+        // Shouldn't be a problem here because we check for > and < cases
         // slither-disable-next-line incorrect-equality
         if (step == _currentStep) {
             return (_currentStep, _pricePerStep[_currentStep]);
