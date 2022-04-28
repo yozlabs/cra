@@ -119,6 +119,9 @@ contract GDA is ERC721A {
     function _getCurrentStepAndPrice() internal view returns (uint256, uint256) {
         uint256 step = _getStep();
 
+        // False positive guarding against using strict equality checks
+        // Shouldn't be a problem here because we check for > and < cases
+        // slither-disable-next-line incorrect-equality
         if (step == _currentStep) {
             return (_currentStep, _pricePerStep[_currentStep]);
         } else if (step > _currentStep) {
@@ -154,8 +157,8 @@ contract GDA is ERC721A {
         uint256 cost = auctionPrice * quantity;
         require(msg.value >= cost, "Insufficient payment");
 
-        _safeMint(msg.sender, quantity);
         _mintsPerStep[auctionStep] += quantity;
+        _safeMint(msg.sender, quantity);
 
         if (msg.value > cost) {
             (bool success, ) = msg.sender.call{value: msg.value - cost}("");

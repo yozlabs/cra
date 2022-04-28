@@ -1,0 +1,17 @@
+name: CI - Static Analysis
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  run-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Static analysis
+        uses: crytic/slither-action@v0.1.1
+        with:
+          node-version: 16
+          slither-args: --exclude-dependencies --exclude-informational
