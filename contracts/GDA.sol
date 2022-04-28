@@ -48,10 +48,11 @@ contract GDA is ERC721A {
         uint256 floorPrice_,
         uint256 priceDelta_
     ) ERC721A(name_, symbol_) {
-        require(collectionSize_ > 0, "collectionSize must be > 0");
-        require(duration_ > 0, "duration must be > 0");
-        require(stepDuration_ > 0, "stepDuration must be > 0");
-        require(startPrice_ >= floorPrice_, "startPrice must be >= floorPrice");
+        require(collectionSize_ > 0, "collectionSize_ must be > 0");
+        require(duration_ > 0, "duration_ must be > 0");
+        require(stepDuration_ > 0, "stepDuration_ must be > 0");
+        require(startPrice_ >= floorPrice_, "startPrice_ must be >= floorPrice");
+        require(priceDelta_ > 0, "priceDelta_ must be > 0");
 
         collectionSize = collectionSize_;
         duration = duration_;
