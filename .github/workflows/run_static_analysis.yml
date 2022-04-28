@@ -14,4 +14,4 @@ jobs:
         uses: crytic/slither-action@v0.1.1
         with:
           node-version: 14
-          slither-args: --exclude-dependencies --exclude-informational
+          slither-args: --exclude-dependencies --exclude-informational --exclude-low --exclude-medium
