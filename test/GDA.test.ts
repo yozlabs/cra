@@ -198,6 +198,16 @@ describe("GDA", function () {
     });
   });
 
+  describe("getCurrentAuctionPrice", function () {
+    it("Returns the current auction price", async function () {
+      for (let i = 0; i < stepDuration + 1; i++) {
+        await network.provider.send("evm_mine");
+      }
+
+      expect(await gda.getCurrentAuctionPrice()).to.equal(startPrice - priceDelta);
+    });
+  });
+
   describe("mint", function () {
     it("Reverts if `quantity` == 0", async function () {
       await expect(gda.mint(0)).to.be.revertedWith("Mint quantity must > 0");
