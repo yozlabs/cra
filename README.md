@@ -15,6 +15,8 @@ Where:
 - `duration` is the total duration of the initial mint auction in blocks
 - `stepDuration` is how many blocks make up a step / phase of the auction (i.e. how frequently to update the mint price)
 
+**Yoz Labs is not liable for any outcomes as a result of using NZA. DYOR.**
+
 ## Getting Started
 
 Clone the repository with:
