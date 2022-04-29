@@ -109,18 +109,18 @@ describe("GDA", function () {
 
   describe("_getAuctionPrice", function () {
     it("Reverts if `prevStep` == 0", async function () {
-      await expect(gda.getAuctionPrice(1, 0)).to.be.revertedWith("prevStep must > 0");
+      await expect(gda.getAuctionPrice(1, 0)).to.be.revertedWith("prevStep must be > 0");
     });
 
     it("Reverts if `_currentStep` < `prevStep`", async function () {
       const _currentStep = await gda.currentStep();
       await expect(gda.getAuctionPrice(_currentStep.add(2), _currentStep.add(1))).to.be.revertedWith(
-        "_currentStep must >= prevStep"
+        "_currentStep must be >= prevStep"
       );
     });
 
     it("Reverts if `currStep` < `prevStep`", async function () {
-      await expect(gda.getAuctionPrice(0, 1)).to.be.revertedWith("currStep must >= prevStep");
+      await expect(gda.getAuctionPrice(0, 1)).to.be.revertedWith("currStep must be >= prevStep");
     });
 
     it("Returns price at step if `currStep` == `prevStep`", async function () {
@@ -200,7 +200,7 @@ describe("GDA", function () {
 
   describe("mint", function () {
     it("Reverts if `quantity` == 0", async function () {
-      await expect(gda.mint(0)).to.be.revertedWith("Mint quantity must > 0");
+      await expect(gda.mint(0)).to.be.revertedWith("Mint quantity must be > 0");
     });
 
     it("Reverts if total minted + `quantity` > `collectionSize`", async function () {
