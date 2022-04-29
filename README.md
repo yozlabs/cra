@@ -1,5 +1,5 @@
-[![ci](https://github.com/yozlabs/nza/actions/workflows/run_tests.yml/badge.svg)](https://github.com/yozlabs/nza/actions/workflows/run_tests.yml)
-[![slither](https://github.com/yozlabs/nza/actions/workflows/run_static_analysis.yml/badge.svg)](https://github.com/yozlabs/nza/actions/workflows/run_static_analysis.yml)
+[![ci](https://github.com/yozlabs/nza-reference/actions/workflows/run_tests.yml/badge.svg)](https://github.com/yozlabs/nza-reference/actions/workflows/run_tests.yml)
+[![slither](https://github.com/yozlabs/nza-reference/actions/workflows/run_static_analysis.yml/badge.svg)](https://github.com/yozlabs/nza-reference/actions/workflows/run_static_analysis.yml)
 
 # New Zealand Auction - (Reference Implementation)
 
