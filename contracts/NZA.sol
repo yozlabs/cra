@@ -26,7 +26,7 @@ contract NZA is ERC721A {
     // Magnitude of price change per step
     uint256 public priceDelta;
 
-    // Expected rate of mints per step
+    // Expected rate of mints per step (calculated)
     uint256 public expectedStepMintRate;
 
     // Current step in the auction, starts at 1

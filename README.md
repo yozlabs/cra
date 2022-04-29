@@ -5,6 +5,16 @@
 
 This repository contains a variant of [the Gradual Duction Auction mechanism proposed by Paradigm](https://www.paradigm.xyz/2022/04/gda).
 
+The fundamental concept is that, unlike a Dutch Auction, the price of the asset can vary both up and down over the length of the auction based on expected demand for the asset. If demand is higher than expected, the price goes up, if demand is lower than expected, the price goes down.
+
+Expected demand is currently calculated as `collectionSize / (duration / stepDuration)`
+
+Where:
+
+- `collectionSize` is the total number of NFTs in the collection
+- `duration` is the total duration of the initial mint auction in blocks
+- `stepDuration` is how many blocks make up a step / phase of the auction (i.e. how frequently to update the mint price)
+
 ## Getting Started
 
 Clone the repository with:
@@ -75,17 +85,3 @@ Run tests with:
 ```
 yarn test
 ```
-
-## Rationale - The Problem
-
-When initially offering an NFT collection, you want to ensure as much value is captured by the collection creators. For NFT collections with a lot of hype - the large amount of demand on launch can cause a spike in gas fees - which represents value captured by miners that should really be directed to the NFT collection. For NFT mints where there is a large enough demand such that the "true" price of the NFT is above the mint price, but not a significant spike in gas fees, value is captured by community members who can resell the NFT on the secondary market for the "true" price. This is value that could have been captured by the collection creators by pricing the mint closer to the "true" price.
-
-A dutch auction partially solves this problem by starting at a high mint price, and decreasing the price over time. This can help to spread out demand for the NFT collection over a longer period of time, and prevent a spike in gas fees.
-
-However, a traditional dutch auction is still open to problems around having an incorrectly priced mint. For example, an NFT collection is minted through a dutch auction, with a starting price of 1 ETH - but demand for the NFT is high enough that people are willing to pay 3 ETH to mint that NFT. In this case, someone would be willing to pay 2 ETH in gas to mint, which is value captured by miners or resellers as opposed to the NFT project creators.
-
-### Solution
-
-A New Zealand Auction (NZA) varies from a traditional Dutch Auction in allowing the price to _increase_, as opposed to just decreasing the price.
-
-If demand for the NFT collection is lower than expected, the minting contract automatically lowers the price to ensure sufficient demand - just like a traditional Dutch Auction. However, if demand is higher than expected, the contract can adjust the price upwards, to ensure value is captured by the project and not by resellers, or by miners through excessive gas fees.
