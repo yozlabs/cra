@@ -77,7 +77,6 @@ contract GDA is ERC721A {
         // because startBlock is always set to the block.number on deploy
         // in the constructor - but a production version of this contract
         // would want to explicitly set the startBlock of the auction
-        //
         require(block.number >= startBlock, "Auction has not started!");
 
         uint256 elapsedBlocks = block.number - startBlock;
