@@ -1,8 +1,8 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const name = "gda";
-  const symbol = "GDA";
+  const name = "nza";
+  const symbol = "NZA";
   const collectionSize = 1000;
   const duration = 30; // in blocks
   const stepDuration = 2; // in blocks
@@ -10,8 +10,8 @@ async function main() {
   const floorPrice = 5000;
   const priceDelta = 500;
 
-  const GDA = await ethers.getContractFactory("GDA");
-  const gda = await GDA.deploy(
+  const NZA = await ethers.getContractFactory("NZA");
+  const nza = await NZA.deploy(
     name,
     symbol,
     collectionSize,
@@ -22,9 +22,9 @@ async function main() {
     priceDelta
   );
 
-  await gda.deployed();
+  await nza.deployed();
 
-  console.log("GDA deployed to:", gda.address);
+  console.log("NZA deployed to:", nza.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
