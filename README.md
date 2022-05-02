@@ -15,7 +15,7 @@ Where:
 - `duration` is the total duration of the initial mint auction in blocks
 - `stepDuration` is how many blocks make up a step / phase of the auction (i.e. how frequently to update the mint price)
 
-_**This contract is a proof of concept and is not production ready. Yoz Labs is not liable for any outcomes as a result of using NZA. DYOR.**_
+**This contract is a proof of concept and is not production ready. Yoz Labs is not liable for any outcomes as a result of using NZA. DYOR.**
 
 ## Getting Started
 
@@ -27,7 +27,7 @@ cd nza
 yarn install
 ```
 
-## Usage
+### Usage
 
 From the `nza` repo, run a Hardhat node with:
 
@@ -49,7 +49,7 @@ To make contract calls and test the contract, run:
 npx hardhat console --network localhost
 ```
 
-From the `hardhat` console, mint an NFT from the contract:
+From the Hardhat console, mint an NFT from the contract:
 
 ```
 let nza = await ethers.getContractAt("NZA", "<contract address>");
@@ -66,7 +66,7 @@ const [signer] = await ethers.getSigners();
 await nza.balanceOf(signer.address);
 ```
 
-## Testing
+### Testing
 
 Compile the contract with:
 
