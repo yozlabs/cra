@@ -1,7 +1,7 @@
 [![ci](https://github.com/yozlabs/nza/actions/workflows/run_tests.yml/badge.svg)](https://github.com/yozlabs/nza/actions/workflows/run_tests.yml)
 [![slither](https://github.com/yozlabs/nza/actions/workflows/run_static_analysis.yml/badge.svg)](https://github.com/yozlabs/nza/actions/workflows/run_static_analysis.yml)
 
-# New Zealand Auction - (Reference Implementation)
+# New Zealand Auction (Reference Implementation)
 
 This repository contains a variant of [the Gradual Duction Auction mechanism proposed by Paradigm](https://www.paradigm.xyz/2022/04/gda).
 
@@ -15,17 +15,21 @@ Where:
 - `duration` is the total duration of the initial mint auction in blocks
 - `stepDuration` is how many blocks make up a step / phase of the auction (i.e. how frequently to update the mint price)
 
-**This contract is a proof of concept and is not production ready. Yoz Labs is not liable for any outcomes as a result of using NZA. DYOR.**
+_**This contract is a proof of concept and is not production ready. Yoz Labs is not liable for any outcomes as a result of using NZA. DYOR.**_
 
 ## Getting Started
 
-Clone the repository with:
+Clone the repository and download dependencies with:
 
 ```
-git clone git@github.com:yozlabs/nza-reference.git
+git clone git@github.com:yozlabs/nza.git
+cd nza
+yarn install
 ```
 
-From the `nza` repo run a Hardhat node with:
+## Usage
+
+From the `nza` repo, run a Hardhat node with:
 
 ```
 npx hardhat node
@@ -45,23 +49,11 @@ To make contract calls and test the contract, run:
 npx hardhat console --network localhost
 ```
 
-### Usage
-
-Load the contract using the contract address from above:
+From the `hardhat` console, mint an NFT from the contract:
 
 ```
 let nza = await ethers.getContractAt("NZA", "<contract address>");
-```
-
-Get the current auction price:
-
-```
 let currentPrice = await nza.getCurrentAuctionPrice();
-```
-
-Mint an NFT:
-
-```
 await nza.mint(1, {value: currentPrice})
 ```
 
@@ -74,7 +66,7 @@ const [signer] = await ethers.getSigners();
 await nza.balanceOf(signer.address);
 ```
 
-### Testing
+## Testing
 
 Compile the contract with:
 
