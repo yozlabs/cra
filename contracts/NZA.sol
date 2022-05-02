@@ -134,21 +134,16 @@ contract NZA is ERC721A {
     function _getCurrentStepAndPrice() internal view returns (uint256, uint256) {
         uint256 step = _getStep();
 
-        // '_currentStep' is stored in state
-        // whileas 'step' is computed on-demand based on the current block.
-        //
-        // So, this statement is always true.
-        assert(step >= _currentStep);
-
         // False positive guarding against using strict equality checks
         // Shouldn't be a problem here because we check for > and < cases
         // slither-disable-next-line incorrect-equality
         if (step == _currentStep) {
             return (_currentStep, _pricePerStep[_currentStep]);
+        } else if (step > _currentStep) {
+            return (step, _getAuctionPrice(step, _currentStep));
+        } else {
+            revert("Step is < _currentStep");
         }
-
-        // If not equal, it must be greater than the current step because of the assert above
-        return (step, _getAuctionPrice(step, _currentStep));
     }
 
     /**
