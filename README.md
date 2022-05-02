@@ -1,7 +1,7 @@
 [![ci](https://github.com/yozlabs/nza/actions/workflows/run_tests.yml/badge.svg)](https://github.com/yozlabs/nza/actions/workflows/run_tests.yml)
 [![slither](https://github.com/yozlabs/nza/actions/workflows/run_static_analysis.yml/badge.svg)](https://github.com/yozlabs/nza/actions/workflows/run_static_analysis.yml)
 
-# New Zealand Auction (Reference Implementation)
+# New Zealand Auction
 
 This repository contains a variant of [the Gradual Duction Auction mechanism proposed by Paradigm](https://www.paradigm.xyz/2022/04/gda).
 
