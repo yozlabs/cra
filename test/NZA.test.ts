@@ -204,7 +204,8 @@ describe("NZA", function () {
         await network.provider.send("evm_mine");
       }
 
-      expect(await gda.getCurrentAuctionPrice()).to.equal(startPrice - priceDelta);
+      // Price should go down by one delta here because nothing was minted
+      expect(await nza.getCurrentAuctionPrice()).to.equal(startPrice - priceDelta);
     });
   });
 

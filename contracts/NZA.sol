@@ -145,9 +145,10 @@ contract NZA is ERC721A {
         // slither-disable-next-line incorrect-equality
         if (step == _currentStep) {
             return (_currentStep, _pricePerStep[_currentStep]);
-        } else if (step > _currentStep) {
-            return (step, _getAuctionPrice(step, _currentStep));
         }
+
+        // If not equal, it must be greater than the current step because of the assert above
+        return (step, _getAuctionPrice(step, _currentStep));
     }
 
     /**
