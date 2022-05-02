@@ -200,11 +200,12 @@ describe("NZA", function () {
 
   describe("getCurrentAuctionPrice", function () {
     it("Returns the current auction price", async function () {
+      expect(await nza.getCurrentAuctionPrice()).to.equal(startPrice);
+
       for (let i = 0; i < stepDuration + 1; i++) {
         await network.provider.send("evm_mine");
       }
 
-      // Price should go down by one delta here because nothing was minted
       expect(await nza.getCurrentAuctionPrice()).to.equal(startPrice - priceDelta);
     });
   });
