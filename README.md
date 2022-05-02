@@ -1,5 +1,5 @@
-[![ci](https://github.com/yozlabs/nza-reference/actions/workflows/run_tests.yml/badge.svg)](https://github.com/yozlabs/nza-reference/actions/workflows/run_tests.yml)
-[![slither](https://github.com/yozlabs/nza-reference/actions/workflows/run_static_analysis.yml/badge.svg)](https://github.com/yozlabs/nza-reference/actions/workflows/run_static_analysis.yml)
+[![ci](https://github.com/yozlabs/nza/actions/workflows/run_tests.yml/badge.svg)](https://github.com/yozlabs/nza/actions/workflows/run_tests.yml)
+[![slither](https://github.com/yozlabs/nza/actions/workflows/run_static_analysis.yml/badge.svg)](https://github.com/yozlabs/nza/actions/workflows/run_static_analysis.yml)
 
 # New Zealand Auction - (Reference Implementation)
 
@@ -25,7 +25,7 @@ Clone the repository with:
 git clone git@github.com:yozlabs/nza-reference.git
 ```
 
-From the `nza-reference` repo run a Hardhat node with:
+From the `nza` repo run a Hardhat node with:
 
 ```
 npx hardhat node
