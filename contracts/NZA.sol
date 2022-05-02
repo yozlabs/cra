@@ -4,7 +4,7 @@ pragma solidity ^0.8.4;
 import "erc721a/contracts/ERC721A.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 
-contract GDA is ERC721A {
+contract NZA is ERC721A {
     // Size of the collection
     uint256 public collectionSize;
 
@@ -26,7 +26,7 @@ contract GDA is ERC721A {
     // Magnitude of price change per step
     uint256 public priceDelta;
 
-    // Expected rate of mints per step
+    // Expected rate of mints per step (calculated)
     uint256 public expectedStepMintRate;
 
     // Current step in the auction, starts at 1
@@ -48,6 +48,12 @@ contract GDA is ERC721A {
         uint256 floorPrice_,
         uint256 priceDelta_
     ) ERC721A(name_, symbol_) {
+        require(collectionSize_ > 0, "collectionSize_ must be > 0");
+        require(duration_ > 0, "duration_ must be > 0");
+        require(stepDuration_ > 0, "stepDuration_ must be > 0");
+        require(startPrice_ >= floorPrice_, "startPrice_ must be >= floorPrice_");
+        require(priceDelta_ > 0, "priceDelta_ must be > 0");
+
         collectionSize = collectionSize_;
         duration = duration_;
         startBlock = block.number;
@@ -67,10 +73,19 @@ contract GDA is ERC721A {
      * @dev Get the current step of the auction based on the elapsed time.
      */
     function _getStep() internal view returns (uint256) {
-        uint256 elapsedBlocks = duration;
-        if (startBlock + duration > block.number) {
-            elapsedBlocks = block.number - startBlock;
+        // Note: In this implementation, this can never happen
+        // because startBlock is always set to the block.number on deploy
+        // in the constructor - but a production version of this contract
+        // would want to explicitly set the startBlock of the auction
+        require(block.number >= startBlock, "Auction has not started!");
+
+        uint256 elapsedBlocks = block.number - startBlock;
+
+        // The auction can't last longer than the auction's duration
+        if (elapsedBlocks > duration) {
+            elapsedBlocks = duration;
         }
+
         uint256 step = Math.ceilDiv(elapsedBlocks, stepDuration);
 
         // Steps start at 1
@@ -81,9 +96,9 @@ contract GDA is ERC721A {
      * @dev Returns the current auction price given the current and previous step.
      */
     function _getAuctionPrice(uint256 currStep, uint256 prevStep) internal view returns (uint256) {
-        require(prevStep > 0, "prevStep must > 0");
-        require(_currentStep >= prevStep, "_currentStep must >= prevStep");
-        require(currStep >= prevStep, "currStep must >= prevStep");
+        require(prevStep > 0, "prevStep must be > 0");
+        require(_currentStep >= prevStep, "_currentStep must be >= prevStep");
+        require(currStep >= prevStep, "currStep must be >= prevStep");
 
         uint256 price = _pricePerStep[prevStep];
         uint256 passedSteps = currStep - prevStep;
@@ -119,12 +134,19 @@ contract GDA is ERC721A {
     function _getCurrentStepAndPrice() internal view returns (uint256, uint256) {
         uint256 step = _getStep();
 
+        // '_currentStep' is stored in state
+        // whileas 'step' is computed on-demand based on the current block.
+        //
+        // So, this statement is always true.
+        assert(step >= _currentStep);
+
+        // False positive guarding against using strict equality checks
+        // Shouldn't be a problem here because we check for > and < cases
+        // slither-disable-next-line incorrect-equality
         if (step == _currentStep) {
             return (_currentStep, _pricePerStep[_currentStep]);
         } else if (step > _currentStep) {
             return (step, _getAuctionPrice(step, _currentStep));
-        } else {
-            revert("Step is < current step");
         }
     }
 
@@ -142,7 +164,7 @@ contract GDA is ERC721A {
      * If the sender sends more ETH than needed, it refunds them.
      */
     function mint(uint256 quantity) external payable {
-        require(quantity > 0, "Mint quantity must > 0");
+        require(quantity > 0, "Mint quantity must be > 0");
         require(_totalMinted() + quantity <= collectionSize, "Will exceed maximum supply");
 
         (uint256 auctionStep, uint256 auctionPrice) = _getCurrentStepAndPrice();
@@ -154,8 +176,8 @@ contract GDA is ERC721A {
         uint256 cost = auctionPrice * quantity;
         require(msg.value >= cost, "Insufficient payment");
 
-        _safeMint(msg.sender, quantity);
         _mintsPerStep[auctionStep] += quantity;
+        _safeMint(msg.sender, quantity);
 
         if (msg.value > cost) {
             (bool success, ) = msg.sender.call{value: msg.value - cost}("");

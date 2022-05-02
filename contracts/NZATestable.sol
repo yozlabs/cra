@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "./GDA.sol";
+import "./NZA.sol";
 
-contract GDATestable is GDA {
+contract NZATestable is NZA {
     constructor(
         string memory name_,
         string memory symbol_,
@@ -13,7 +13,7 @@ contract GDATestable is GDA {
         uint256 startPrice_,
         uint256 floorPrice_,
         uint256 priceDelta_
-    ) GDA(name_, symbol_, collectionSize_, duration_, stepDuration_, startPrice_, floorPrice_, priceDelta_) {}
+    ) NZA(name_, symbol_, collectionSize_, duration_, stepDuration_, startPrice_, floorPrice_, priceDelta_) {}
 
     function currentStep() external view returns (uint256) {
         return _currentStep;
