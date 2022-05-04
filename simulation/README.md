@@ -1,6 +1,6 @@
-# Simulation of NZA
+# Simulation of CRA
 
-This folder contains a Python simulation of the pricing model for NZA. We applied our pricing model to historical mint data to see the impact the model has on the price curve. We used Dune analytics to pull the historical data and provide links to the original queries below.
+This folder contains a Python simulation of the pricing model for CRA. We applied our pricing model to historical mint data to see the impact the model has on the price curve. We used Dune analytics to pull the historical data and provide links to the original queries below.
 
 The NFT project mints we use are the following:
 
