@@ -2,8 +2,8 @@ import math
 from collections import defaultdict
 
 
-class NZA:
-    """This class simulates the pricing logic for the NZA."""
+class CRA:
+    """This class simulates the pricing logic for the CRA."""
 
     # Internal state of the auction that tracks the step to tokens minted and price.
     _step_minted_price_dict = defaultdict(lambda: {"minted": 0, "price": None})

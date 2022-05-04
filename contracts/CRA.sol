@@ -4,7 +4,7 @@ pragma solidity ^0.8.4;
 import "erc721a/contracts/ERC721A.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 
-contract NZA is ERC721A {
+contract CRA is ERC721A {
     // Size of the collection
     uint256 public collectionSize;
 

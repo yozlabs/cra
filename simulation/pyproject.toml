@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "NZASimulation"
+name = "CRASimulation"
 version = "1.0.0"
-description = "Simulation of the NZA dynamic mint pricing model."
+description = "Simulation of the CRA dynamic mint pricing model."
 authors = ["will@yoz.gg"]
 
 [tool.poetry.dependencies]

@@ -6,7 +6,7 @@ import pandas as pd
 import seaborn as sns
 
 from data import get_project_data
-from nza import NZA
+from cra import CRA
 
 parser = argparse.ArgumentParser()
 parser.add_argument("proj_name", type=str, help="A supported project name")
@@ -15,7 +15,7 @@ parser.add_argument("proj_name", type=str, help="A supported project name")
 def main(proj_name):
     config, dataframe = get_project_data(proj_name)
 
-    auction = NZA(
+    auction = CRA(
         config["start_block"],
         config["duration"],
         config["step_duration"],
