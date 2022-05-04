@@ -3,7 +3,8 @@
 
 # New Zealand Auction
 
-This repository contains a variant of [the Gradual Duction Auction mechanism proposed by Paradigm](https://www.paradigm.xyz/2022/04/gda).
+This repository contains a variant of [the Constant Rate Issuance Sales Protocol
+ mechanism proposed by Paradigm](https://www.paradigm.xyz/2022/01/constant-rate-issuance-sales-protocol).
 
 The fundamental concept is that, unlike a Dutch Auction, the price of the asset can vary both up and down over the length of the auction based on expected demand for the asset. If demand is higher than expected, the price goes up, if demand is lower than expected, the price goes down.
 
